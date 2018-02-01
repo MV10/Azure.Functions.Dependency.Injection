@@ -6,24 +6,12 @@ namespace FuncInjector
 {
     public class InjectorConfigTriggerListener : IListener
     {
-        public void Dispose()
-        {
+        public void Dispose() { }
 
-        }
+        public Task StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
+        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
-
-        public void Cancel()
-        {
-
-        }
+        public void Cancel() { }
     }
 }

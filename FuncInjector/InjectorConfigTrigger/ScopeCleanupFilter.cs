@@ -7,13 +7,9 @@ namespace FuncInjector
 {
     public class ScopeCleanupFilter : IFunctionInvocationFilter, IFunctionExceptionFilter
     {
-        private readonly InjectorConfigTrigger _injectConfiguration;
+        private readonly InjectorConfigTrigger config;
 
-        public ScopeCleanupFilter(InjectorConfigTrigger injectConfiguration)
-        {
-            _injectConfiguration = injectConfiguration;
-        }
-
+        public ScopeCleanupFilter(InjectorConfigTrigger injectConfiguration) => config = injectConfiguration;
 
         public Task OnExceptionAsync(FunctionExceptionContext exceptionContext, CancellationToken cancellationToken)
         {
@@ -27,15 +23,12 @@ namespace FuncInjector
             return Task.CompletedTask;
         }
 
-        public Task OnExecutingAsync(FunctionExecutingContext executingContext, CancellationToken cancellationToken) =>
-            Task.CompletedTask;
+        public Task OnExecutingAsync(FunctionExecutingContext executingContext, CancellationToken cancellationToken) => Task.CompletedTask;
 
         private void RemoveScope(Guid id)
         {
-            if (_injectConfiguration.Scopes.TryRemove(id, out var scope))
-            {
+            if (config.Scopes.TryRemove(id, out var scope))
                 scope.Dispose();
-            }
         }
     }
 }

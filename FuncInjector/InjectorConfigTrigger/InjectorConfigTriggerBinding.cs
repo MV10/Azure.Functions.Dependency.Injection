@@ -15,27 +15,25 @@ namespace FuncInjector
 {
     public class InjectorConfigTriggerBinding : ITriggerBinding
     {
-        private readonly InjectorConfigTrigger _configuration;
-        private readonly Dictionary<string, Type> _bindingContract;
-        private readonly ParameterInfo _parameter;
-
-        public InjectorConfigTriggerBinding(ParameterInfo parameter, InjectorConfigTrigger configuration)
-        {
-            _parameter = parameter;
-            _configuration = configuration;
-            _bindingContract = new Dictionary<string, Type>(StringComparer.CurrentCultureIgnoreCase)
+        private readonly Dictionary<string, Type> bindingContract 
+            = new Dictionary<string, Type>(StringComparer.CurrentCultureIgnoreCase)
             {
                 {"data", typeof(IServiceCollection)}
             };
+
+        private readonly InjectorConfigTrigger configuration;
+        private readonly ParameterInfo parameter;
+        public InjectorConfigTriggerBinding(ParameterInfo parameter, InjectorConfigTrigger configuration)
+        {
+            this.parameter = parameter;
+            this.configuration = configuration;
         }
 
         public Task<ITriggerData> BindAsync(object value, ValueBindingContext context)
         {
             if(value is IServiceCollection)
             {
-                IValueBinder binder =
-                    new InjectorConfigTriggerValueBinder(value as IServiceCollection, _parameter.ParameterType);
-
+                IValueBinder binder = new InjectorConfigTriggerValueBinder(value as IServiceCollection, parameter.ParameterType);
                 return Task.FromResult((ITriggerData)new TriggerData(binder,
                     new Dictionary<string, object>(StringComparer.CurrentCultureIgnoreCase)
                     {
@@ -47,45 +45,27 @@ namespace FuncInjector
 
         public Task<IListener> CreateListenerAsync(ListenerFactoryContext context)
         {
-            _configuration.AddConfigExecutor(context.Descriptor.ShortName, context.Executor);
+            configuration.AddConfigExecutor(context.Descriptor.ShortName, context.Executor);
             return Task.FromResult((IListener)new InjectorConfigTriggerListener());
         }
 
-        public ParameterDescriptor ToParameterDescriptor()
-        {
-            return new InjectorConfigTriggerParameterDescriptor();
-        }
+        public ParameterDescriptor ToParameterDescriptor() => new InjectorConfigTriggerParameterDescriptor();
 
         public Type TriggerValueType => typeof(IServiceCollection);
 
-        public IReadOnlyDictionary<string, Type> BindingDataContract => _bindingContract;
+        public IReadOnlyDictionary<string, Type> BindingDataContract => bindingContract;
 
         private class InjectorConfigTriggerValueBinder : ValueBinder, IDisposable
         {
-            private readonly IServiceCollection _serviceCollection;
-
+            private readonly IServiceCollection services;
             public InjectorConfigTriggerValueBinder(IServiceCollection serviceCollection, Type type, BindStepOrder bindStepOrder = BindStepOrder.Default) : base(type, bindStepOrder)
-            {
-                _serviceCollection = serviceCollection;
-            }
+                => services = serviceCollection;
 
-            public void Dispose()
-            {
+            public void Dispose() { }
 
-            }
-
-            public override Task<object> GetValueAsync()
-            {
-                return Task.FromResult((object)_serviceCollection);
-            }
+            public override Task<object> GetValueAsync() => Task.FromResult((object)services);
 
             public override string ToInvokeString() => string.Empty;
-            //{
-            //    // TODO:Executor
-            //    return "nono";
-            //}
-
-
         }
 
         private class InjectorConfigTriggerParameterDescriptor : TriggerParameterDescriptor
