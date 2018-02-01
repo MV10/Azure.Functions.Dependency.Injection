@@ -10,13 +10,13 @@ namespace FuncInjector
     public class InjectBinding : IBinding
     {
         private readonly Type type;
-        private readonly InjectorConfigTrigger config;
+        private readonly InjectorConfigTrigger trigger;
         private readonly string configfunction;
 
         public InjectBinding(Type type, InjectorConfigTrigger configuration, string configFunctionName)
         {
             this.type = type;
-            config = configuration;
+            trigger = configuration;
             configfunction = configFunctionName;
         }
 
@@ -27,9 +27,8 @@ namespace FuncInjector
 
         public async Task<IValueProvider> BindAsync(BindingContext context)
         {
-            // await Task.Yield();
-            var provider = config.GetServiceProvider(configfunction);
-            var scope = config.Scopes.GetOrAdd(context.FunctionInstanceId, (_) => provider.CreateScope());
+            var provider = trigger.GetServiceProvider(configfunction);
+            var scope = trigger.Scopes.GetOrAdd(context.FunctionInstanceId, (_) => provider.CreateScope());
             var value = scope.ServiceProvider.GetRequiredService(type);
             return await BindAsync(value, context.ValueContext);
         }

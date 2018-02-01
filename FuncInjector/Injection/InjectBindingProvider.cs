@@ -14,7 +14,7 @@ namespace FuncInjector
         {
             var parameter = context.Parameter;
             var attribute = parameter.GetCustomAttribute<InjectAttribute>(false);
-            IBinding binding = new InjectBinding(context.Parameter.ParameterType, config, attribute.InjectConfigFunctionName);
+            IBinding binding = new InjectBinding(context.Parameter.ParameterType, config, attribute.InjectorConfigFunctionName);
             return Task.FromResult(binding);
         }
     }

@@ -17,8 +17,6 @@ namespace FuncInjector
 
         public void Initialize(ExtensionConfigContext context)
         {
-            var services = new ServiceCollection();
-            var serviceProvider = services.BuildServiceProvider(true);
             context
                 .AddBindingRule<InjectAttribute>()
                 .Bind(new InjectBindingProvider(this));
@@ -33,9 +31,9 @@ namespace FuncInjector
         {
             var lazy = new Lazy<IServiceProvider>(() =>
             {
-                var serviceCollection = CreateServiceCollection();
-                executor.TryExecuteAsync(new TriggeredFunctionData() {TriggerValue = serviceCollection}, CancellationToken.None).GetAwaiter().GetResult();
-                return serviceCollection.BuildServiceProvider();
+                var services = new ServiceCollection();
+                executor.TryExecuteAsync(new TriggeredFunctionData() {TriggerValue = services}, CancellationToken.None).GetAwaiter().GetResult();
+                return services.BuildServiceProvider();
             });
             configFnExecs.TryAdd(functionName, lazy);
         }
@@ -46,9 +44,7 @@ namespace FuncInjector
             {
                 return result.Value;
             }
-            throw new Exception("Not Found ConfigFunction");
+            throw new Exception($"InjectorConfigTrigger function {functionName} not found.");
         }
-        
-        protected virtual IServiceCollection CreateServiceCollection() => new ServiceCollection();
     }
 }

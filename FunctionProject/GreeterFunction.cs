@@ -24,32 +24,32 @@ namespace FunctionProject
 
         [FunctionName("GreeterSingleton1")]
         public static async Task<HttpResponseMessage> Run1(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get")]HttpRequestMessage req,
-            [Inject("SingletonConfig")]IGreeter greeter)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestMessage req,
+            [Inject("SingletonConfig")] IGreeter greeter)
         {
             return req.CreateResponse(greeter.Greet());
         }
 
         [FunctionName("GreeterSingleton2")]
         public static async Task<HttpResponseMessage> Run2(
-           [HttpTrigger(AuthorizationLevel.Anonymous, "get")]HttpRequestMessage req,
-           [Inject("SingletonConfig")]IGreeter greeter)
+           [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestMessage req,
+           [Inject("SingletonConfig")] IGreeter greeter)
         {
             return req.CreateResponse(greeter.Greet());
         }
 
         [FunctionName("GreeterScope")]
         public static async Task<HttpResponseMessage> Run3(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get")]HttpRequestMessage req,
-            [Inject("ScopeConfig")]IGreeter greeter)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestMessage req,
+            [Inject("ScopeConfig")] IGreeter greeter)
         {
             return req.CreateResponse(greeter.Greet());
         }
 
         [FunctionName("GreeterTransient")]
         public static async Task<HttpResponseMessage> Run4(
-           [HttpTrigger(AuthorizationLevel.Anonymous, "get")]HttpRequestMessage req,
-           [Inject("ScopeTransient")]IGreeter greeter)
+           [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestMessage req,
+           [Inject("ScopeTransient")] IGreeter greeter)
         {
             return req.CreateResponse(greeter.Greet());
         }

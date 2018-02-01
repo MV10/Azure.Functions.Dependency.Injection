@@ -7,11 +7,11 @@ namespace FuncInjector
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
     public class InjectAttribute : Attribute
     {
-        public string InjectConfigFunctionName { get; private set; }
+        public string InjectorConfigFunctionName { get; private set; }
 
         public InjectAttribute(string configFunctionName)
         {
-            InjectConfigFunctionName = configFunctionName;
+            InjectorConfigFunctionName = configFunctionName;
         }
     }
 }
