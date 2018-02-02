@@ -14,7 +14,7 @@ namespace Library
 
         public new string Greet()
         {
-            return $"Hello World, counter {counter.count++}, created {constructed}";
+            return $"Hello World, counter {counter.count++}, ms:{constructed.Millisecond}";
         }
     }
 }

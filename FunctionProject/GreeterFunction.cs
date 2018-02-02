@@ -13,19 +13,10 @@ namespace FunctionProject
 {
     public static class GreeterFunction
     {
-        [FunctionName("TickTock")]
-        public static void Run0(
-            [TimerTrigger("*/15 * * * * *")] TimerInfo myTimer, // every 15 sec
-            [Inject("TickTockConfig")]ITickTock ticker,
-            TraceWriter log)
-        {
-            log.Info($"{ticker.TickOrTock()} ... C# Timer trigger function executed at: {DateTime.Now}");
-        }
-
         [FunctionName("GreeterSingleton1")]
         public static async Task<HttpResponseMessage> Run1(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestMessage req,
-            [Inject("SingletonConfig")] IGreeter greeter)
+            [Inject("RegisterSingletons")] IGreeter greeter)
         {
             return req.CreateResponse(greeter.Greet());
         }
@@ -33,49 +24,61 @@ namespace FunctionProject
         [FunctionName("GreeterSingleton2")]
         public static async Task<HttpResponseMessage> Run2(
            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestMessage req,
-           [Inject("SingletonConfig")] IGreeter greeter)
+           [Inject("RegisterSingletons")] IGreeter greeter)
         {
             return req.CreateResponse(greeter.Greet());
         }
 
-        [FunctionName("GreeterScope")]
+        [FunctionName("GreeterScoped")]
         public static async Task<HttpResponseMessage> Run3(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestMessage req,
-            [Inject("ScopeConfig")] IGreeter greeter)
+            [Inject("RegisterScoped")] IGreeter greeter,
+            [Inject("RegisterScoped")] IGreeterConsumer scoped)
         {
-            return req.CreateResponse(greeter.Greet());
+            return req.CreateResponse($"greetersvc {greeter.Greet()} --- scopedsvc {scoped.Greeting()}");
+        }
+
+        [FunctionName("GreeterNonScoped")]
+        public static async Task<HttpResponseMessage> Run4(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestMessage req,
+            [Inject("RegisterNonScoped")] IGreeter greeter,
+            [Inject("RegisterNonScoped")] IGreeterConsumer scoped)
+        {
+            return req.CreateResponse($"greetersvc {greeter.Greet()} --- scopedsvc {scoped.Greeting()}");
         }
 
         [FunctionName("GreeterTransient")]
-        public static async Task<HttpResponseMessage> Run4(
+        public static async Task<HttpResponseMessage> Run5(
            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestMessage req,
-           [Inject("ScopeTransient")] IGreeter greeter)
+           [Inject("RegisterTransient")] IGreeter greeter)
         {
             return req.CreateResponse(greeter.Greet());
         }
 
-        [FunctionName("SingletonConfig")]
+        [FunctionName("RegisterSingletons")]
         public static void Config1([InjectorConfigTrigger] IServiceCollection services)
         {
             services.AddGreeterSingleton();
         }
 
-        [FunctionName("ScopeConfig")]
+        [FunctionName("RegisterScoped")]
         public static void Config2([InjectorConfigTrigger] IServiceCollection services)
         {
             services.AddGreeterScoped();
+            services.AddGreeterConsumer();
         }
 
-        [FunctionName("ScopeTransient")]
+        [FunctionName("RegisterNonScoped")]
         public static void Config3([InjectorConfigTrigger] IServiceCollection services)
         {
             services.AddGreeterTransient();
+            services.AddGreeterConsumer();
         }
 
-        [FunctionName("TickTockConfig")]
+        [FunctionName("RegisterTransient")]
         public static void Config4([InjectorConfigTrigger] IServiceCollection services)
         {
-            services.AddTickTockTransient();
+            services.AddGreeterTransient();
         }
     }
 }

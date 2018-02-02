@@ -12,7 +12,7 @@ namespace Library
 
         public string Greet()
         {
-            return $"Hello World, no counter, created {constructed}";
+            return $"Hello World, no counter, ms:{constructed.Millisecond}";
         }
     }
 }
