@@ -5,5 +5,5 @@ namespace FuncInjector
 {
     [Binding]
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
-    public class InjectorConfigTriggerAttribute : Attribute { }
+    public class RegisterServicesTriggerAttribute : Attribute { }
 }

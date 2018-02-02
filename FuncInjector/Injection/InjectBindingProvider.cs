@@ -6,15 +6,15 @@ namespace FuncInjector
 {
     public class InjectBindingProvider : IBindingProvider
     {
-        private readonly InjectorConfigTrigger config;
+        private readonly RegisterServicesTrigger config;
 
-        public InjectBindingProvider(InjectorConfigTrigger configuration) => config = configuration;
+        public InjectBindingProvider(RegisterServicesTrigger configuration) => config = configuration;
 
         public Task<IBinding> TryCreateAsync(BindingProviderContext context)
         {
             var parameter = context.Parameter;
             var attribute = parameter.GetCustomAttribute<InjectAttribute>(false);
-            IBinding binding = new InjectBinding(context.Parameter.ParameterType, config, attribute.InjectorConfigFunctionName);
+            IBinding binding = new InjectBinding(context.Parameter.ParameterType, config, attribute.RegisterServicesFunctionName);
             return Task.FromResult(binding);
         }
     }

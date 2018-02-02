@@ -56,27 +56,27 @@ namespace FunctionProject
         }
 
         [FunctionName("RegisterSingletons")]
-        public static void Config1([InjectorConfigTrigger] IServiceCollection services)
+        public static void Config1([RegisterServicesTrigger] IServiceCollection services)
         {
             services.AddGreeterSingleton();
         }
 
         [FunctionName("RegisterScoped")]
-        public static void Config2([InjectorConfigTrigger] IServiceCollection services)
+        public static void Config2([RegisterServicesTrigger] IServiceCollection services)
         {
             services.AddGreeterScoped();
             services.AddGreeterConsumer();
         }
 
         [FunctionName("RegisterNonScoped")]
-        public static void Config3([InjectorConfigTrigger] IServiceCollection services)
+        public static void Config3([RegisterServicesTrigger] IServiceCollection services)
         {
             services.AddGreeterTransient();
             services.AddGreeterConsumer();
         }
 
         [FunctionName("RegisterTransient")]
-        public static void Config4([InjectorConfigTrigger] IServiceCollection services)
+        public static void Config4([RegisterServicesTrigger] IServiceCollection services)
         {
             services.AddGreeterTransient();
         }

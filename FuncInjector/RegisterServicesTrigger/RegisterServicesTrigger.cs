@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FuncInjector
 {
-    public class InjectorConfigTrigger : IExtensionConfigProvider
+    public class RegisterServicesTrigger : IExtensionConfigProvider
     {
         public readonly ConcurrentDictionary<Guid, IServiceScope> Scopes = new ConcurrentDictionary<Guid, IServiceScope>();
 
@@ -24,7 +24,7 @@ namespace FuncInjector
             var filter = new ScopeCleanupFilter(this);
             registry.RegisterExtension(typeof(IFunctionInvocationFilter), filter);
             registry.RegisterExtension(typeof(IFunctionExceptionFilter), filter);
-            context.Config.RegisterBindingExtensions(new InjectorConfigTriggerBindingProvider(this));
+            context.Config.RegisterBindingExtensions(new RegisterServicesTriggerBindingProvider(this));
         }
 
         public void AddConfigExecutor(string functionName, ITriggeredFunctionExecutor executor)
@@ -44,7 +44,7 @@ namespace FuncInjector
             {
                 return result.Value;
             }
-            throw new Exception($"InjectorConfigTrigger function {functionName} not found.");
+            throw new Exception($"RegisterServicesTrigger function {functionName} not found.");
         }
     }
 }

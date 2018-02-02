@@ -10,10 +10,10 @@ namespace FuncInjector
     public class InjectBinding : IBinding
     {
         private readonly Type type;
-        private readonly InjectorConfigTrigger trigger;
+        private readonly RegisterServicesTrigger trigger;
         private readonly string configfunction;
 
-        public InjectBinding(Type type, InjectorConfigTrigger configuration, string configFunctionName)
+        public InjectBinding(Type type, RegisterServicesTrigger configuration, string configFunctionName)
         {
             this.type = type;
             trigger = configuration;

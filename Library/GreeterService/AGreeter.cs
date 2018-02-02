@@ -6,13 +6,9 @@ namespace Library
     {
         public readonly DateTimeOffset constructed;
         public AGreeter()
-        {
-            constructed = DateTimeOffset.UtcNow;
-        }
+            => constructed = DateTimeOffset.UtcNow;
 
         public string Greet()
-        {
-            return $"Hello World, no counter, ms:{constructed.Millisecond}";
-        }
+            => $"Hello World, no counter, ms:{constructed.Millisecond}";
     }
 }

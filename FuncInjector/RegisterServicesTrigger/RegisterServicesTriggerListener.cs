@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace FuncInjector
 {
-    public class InjectorConfigTriggerListener : IListener
+    public class RegisterServicesTriggerListener : IListener
     {
         public void Dispose() { }
 

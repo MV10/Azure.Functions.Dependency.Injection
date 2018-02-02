@@ -7,9 +7,9 @@ namespace FuncInjector
 {
     public class ScopeCleanupFilter : IFunctionInvocationFilter, IFunctionExceptionFilter
     {
-        private readonly InjectorConfigTrigger config;
+        private readonly RegisterServicesTrigger config;
 
-        public ScopeCleanupFilter(InjectorConfigTrigger injectConfiguration) => config = injectConfiguration;
+        public ScopeCleanupFilter(RegisterServicesTrigger injectConfiguration) => config = injectConfiguration;
 
         public Task OnExceptionAsync(FunctionExceptionContext exceptionContext, CancellationToken cancellationToken)
         {

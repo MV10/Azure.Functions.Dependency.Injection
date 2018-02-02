@@ -13,7 +13,7 @@ using Microsoft.Azure.WebJobs.Host.Triggers;
 using Microsoft.Extensions.DependencyInjection;
 namespace FuncInjector
 {
-    public class InjectorConfigTriggerBinding : ITriggerBinding
+    public class RegisterServicesTriggerBinding : ITriggerBinding
     {
         private readonly Dictionary<string, Type> bindingContract 
             = new Dictionary<string, Type>(StringComparer.CurrentCultureIgnoreCase)
@@ -21,9 +21,9 @@ namespace FuncInjector
                 {"data", typeof(IServiceCollection)}
             };
 
-        private readonly InjectorConfigTrigger configuration;
+        private readonly RegisterServicesTrigger configuration;
         private readonly ParameterInfo parameter;
-        public InjectorConfigTriggerBinding(ParameterInfo parameter, InjectorConfigTrigger configuration)
+        public RegisterServicesTriggerBinding(ParameterInfo parameter, RegisterServicesTrigger configuration)
         {
             this.parameter = parameter;
             this.configuration = configuration;
@@ -33,7 +33,7 @@ namespace FuncInjector
         {
             if(value is IServiceCollection)
             {
-                IValueBinder binder = new InjectorConfigTriggerValueBinder(value as IServiceCollection, parameter.ParameterType);
+                IValueBinder binder = new RegisterServicesTriggerValueBinder(value as IServiceCollection, parameter.ParameterType);
                 return Task.FromResult((ITriggerData)new TriggerData(binder,
                     new Dictionary<string, object>(StringComparer.CurrentCultureIgnoreCase)
                     {
@@ -46,19 +46,19 @@ namespace FuncInjector
         public Task<IListener> CreateListenerAsync(ListenerFactoryContext context)
         {
             configuration.AddConfigExecutor(context.Descriptor.ShortName, context.Executor);
-            return Task.FromResult((IListener)new InjectorConfigTriggerListener());
+            return Task.FromResult((IListener)new RegisterServicesTriggerListener());
         }
 
-        public ParameterDescriptor ToParameterDescriptor() => new InjectorConfigTriggerParameterDescriptor();
+        public ParameterDescriptor ToParameterDescriptor() => new RegisterServicesTriggerParameterDescriptor();
 
         public Type TriggerValueType => typeof(IServiceCollection);
 
         public IReadOnlyDictionary<string, Type> BindingDataContract => bindingContract;
 
-        private class InjectorConfigTriggerValueBinder : ValueBinder, IDisposable
+        private class RegisterServicesTriggerValueBinder : ValueBinder, IDisposable
         {
             private readonly IServiceCollection services;
-            public InjectorConfigTriggerValueBinder(IServiceCollection serviceCollection, Type type, BindStepOrder bindStepOrder = BindStepOrder.Default) : base(type, bindStepOrder)
+            public RegisterServicesTriggerValueBinder(IServiceCollection serviceCollection, Type type, BindStepOrder bindStepOrder = BindStepOrder.Default) : base(type, bindStepOrder)
                 => services = serviceCollection;
 
             public void Dispose() { }
@@ -68,12 +68,12 @@ namespace FuncInjector
             public override string ToInvokeString() => string.Empty;
         }
 
-        private class InjectorConfigTriggerParameterDescriptor : TriggerParameterDescriptor
+        private class RegisterServicesTriggerParameterDescriptor : TriggerParameterDescriptor
         {
             public override string GetTriggerReason(IDictionary<string, string> arguments)
             {
                 // TODO: Customize your Dashboard display string
-                return string.Format("InjectorConfigTrigger trigger fired at {0}", DateTime.Now.ToString("o"));
+                return string.Format("RegisterServicesTrigger trigger fired at {0}", DateTime.Now.ToString("o"));
             }
         }
     }
