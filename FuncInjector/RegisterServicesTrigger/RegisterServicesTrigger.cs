@@ -9,6 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FuncInjector
 {
+    /// <summary>
+    /// Initialization and Lazy storage of all RegisterServices triggers.
+    /// </summary>
     public class RegisterServicesTrigger : IExtensionConfigProvider
     {
         public readonly ConcurrentDictionary<Guid, IServiceScope> Scopes = new ConcurrentDictionary<Guid, IServiceScope>();
@@ -21,7 +24,7 @@ namespace FuncInjector
                 .AddBindingRule<InjectAttribute>()
                 .Bind(new InjectBindingProvider(this));
             var registry = context.Config.GetService<IExtensionRegistry>();
-            var filter = new ScopeCleanupFilter(this);
+            var filter = new ReleaseScopedServicesFilter(this);
             registry.RegisterExtension(typeof(IFunctionInvocationFilter), filter);
             registry.RegisterExtension(typeof(IFunctionExceptionFilter), filter);
             context.Config.RegisterBindingExtensions(new RegisterServicesTriggerBindingProvider(this));

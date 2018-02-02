@@ -7,6 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FuncInjector
 {
+    /// <summary>
+    /// Factory for RegisterServicesTriggerBinding.
+    /// </summary>
     public class RegisterServicesTriggerBindingProvider : ITriggerBindingProvider
     {
         private readonly RegisterServicesTrigger configuration;

@@ -2,6 +2,9 @@
 
 namespace Library
 {
+    /// <summary>
+    /// Service registration helpers for IGreeter implementations and related dependencies.
+    /// </summary>
     public static class GreeterInjectionExtensions
     {
         public static IServiceCollection AddGreeterSingleton(this IServiceCollection services)

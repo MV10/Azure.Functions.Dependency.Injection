@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace FuncInjector
 {
+    /// <summary>
+    /// RegisterServices trigger only needs to provide basic start/stop acknowledgements.
+    /// </summary>
     public class RegisterServicesTriggerListener : IListener
     {
         public void Dispose() { }

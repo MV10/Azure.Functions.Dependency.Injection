@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Library
 {
+    /// <summary>
+    /// A helper to properly register the IGreeterConsumer service.
+    /// </summary>
     public static class GreeterConsumerInjectionExtensions
     {
         public static IServiceCollection AddGreeterConsumer(this IServiceCollection services)

@@ -4,6 +4,10 @@ using System.Text;
 
 namespace Library
 {
+    /// <summary>
+    /// An implementation of IGreeter which depends on ICounter. By incrementing
+    /// the counter we can demonstrate singleton lifetime services.
+    /// </summary>
     public class CountUpGreeter : AGreeter, IGreeter
     {
         private readonly ICounter counter;

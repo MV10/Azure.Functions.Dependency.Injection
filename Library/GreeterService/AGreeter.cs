@@ -2,6 +2,10 @@
 
 namespace Library
 {
+    /// <summary>
+    /// A basic implementation of IGreeter. The constructed property's Millisecond value
+    /// can be used to compare instances.
+    /// </summary>
     public class AGreeter : IGreeter
     {
         public readonly DateTimeOffset constructed;

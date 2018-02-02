@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace FuncInjector
 {
+    /// <summary>
+    /// The factory for InjectBinding.
+    /// </summary>
     public class InjectBindingProvider : IBindingProvider
     {
         private readonly RegisterServicesTrigger config;

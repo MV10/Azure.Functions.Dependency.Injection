@@ -11,8 +11,13 @@ using Microsoft.Azure.WebJobs.Host.Listeners;
 using Microsoft.Azure.WebJobs.Host.Protocols;
 using Microsoft.Azure.WebJobs.Host.Triggers;
 using Microsoft.Extensions.DependencyInjection;
+
 namespace FuncInjector
 {
+    /// <summary>
+    /// Binds the trigger to an IServicesCollection type and creates a basic Listener
+    /// driven by a value-request from an [Inject] attribute.
+    /// </summary>
     public class RegisterServicesTriggerBinding : ITriggerBinding
     {
         private readonly Dictionary<string, Type> bindingContract 
