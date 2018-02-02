@@ -55,6 +55,14 @@ namespace FunctionProject
             return req.CreateResponse(greeter.Greet());
         }
 
+        [FunctionName("GreeterDefaultReg")]
+        public static async Task<HttpResponseMessage> Run6(
+           [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestMessage req,
+           [Inject] IGreeter greeter)
+        {
+            return req.CreateResponse(greeter.Greet());
+        }
+
         [FunctionName("RegisterSingletons")]
         public static void Config1([RegisterServicesTrigger] IServiceCollection services)
         {
@@ -77,6 +85,12 @@ namespace FunctionProject
 
         [FunctionName("RegisterTransient")]
         public static void Config4([RegisterServicesTrigger] IServiceCollection services)
+        {
+            services.AddGreeterTransient();
+        }
+
+        [FunctionName("RegisterServices")] // default registration trigger name for [Inject]
+        public static void Config5([RegisterServicesTrigger] IServiceCollection services)
         {
             services.AddGreeterTransient();
         }

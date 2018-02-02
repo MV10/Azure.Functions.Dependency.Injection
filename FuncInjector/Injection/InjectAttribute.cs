@@ -9,7 +9,7 @@ namespace FuncInjector
     {
         public string RegisterServicesFunctionName { get; private set; }
 
-        public InjectAttribute(string configFunctionName)
+        public InjectAttribute(string configFunctionName = "RegisterServices")
         {
             RegisterServicesFunctionName = configFunctionName;
         }
