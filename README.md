@@ -14,7 +14,7 @@ Based upon work in these repos:
 
 2018-04 About Functions V2:
 
-I'd hoped to update this library to support Functions V2, however all of the `netstandard20`-compatible releases of the SDK and the webjob assemblies throw various binding errors (most recently while running locally, and in all cases when deployed to Azure). I spent a couple days researching the problem and trying various things, and I've concluded the Functions are moving in a direction that may make custom trigger bindings impossible to build.
+I'd hoped to update this library to support Functions V2, however all of the `netstandard20`-compatible releases of the SDK and the webjob assemblies throw various binding errors (most recently while running locally, and in all cases when deployed to Azure). I spent a couple days researching the problem and trying various things, and I've concluded that Functions are moving in a direction that may make custom trigger bindings impossible to build.
 
 Unfortunately [this](https://github.com/Azure/azure-webjobs-sdk/wiki/Creating-custom-input-and-output-bindings) Functions wiki even states "Custom triggers are not available for Azure Functions," and various Microsoft folks have responded to Stack Overflow questions that custom triggers aren't in-scope.
 
