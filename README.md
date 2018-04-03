@@ -23,3 +23,7 @@ Since the service registration custom trigger is part of what made this DI libra
 The V2 changes likely would have been pretty simple, apart from the new extensions installation/registration gynmastics (which supposedly will go away). I'll leave the changes in a separate branch in case someone else has more time to kill than I do!
 
 https://github.com/MV10/Azure.Functions.Dependency.Injection/tree/FunctionsV2
+
+See also:
+
+### [Service Locator for Azure Functions V2](https://mcguirev10.com/2018/04/03/service-locator-azure-functions-v2.html)
