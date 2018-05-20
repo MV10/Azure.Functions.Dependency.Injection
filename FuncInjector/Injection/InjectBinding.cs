@@ -2,6 +2,7 @@
 using Microsoft.Azure.WebJobs.Host.Protocols;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace FuncInjector
@@ -13,14 +14,30 @@ namespace FuncInjector
     /// </summary>
     public class InjectBinding : IBinding
     {
-        private readonly Type type;
-        private readonly RegisterServicesTrigger triggerAttrib;
+        private readonly bool isArray =false;
+        private readonly bool hasDefaultValue = false;
+        private readonly object defaultValue;
+
+        private readonly Type elementType;
+        private readonly RegisterServicesTrigger triggerAttribute;
         private readonly string triggerFunction;
 
-        public InjectBinding(Type type, RegisterServicesTrigger regSvcTrigger, string regSvcFunctionName)
+        /// <summary>
+        /// </summary>
+        /// <param name="parameterInfo"></param>
+        /// <param name="regSvcTrigger"></param>
+        /// <param name="regSvcFunctionName"></param>
+        public InjectBinding(ParameterInfo parameterInfo, RegisterServicesTrigger regSvcTrigger, string regSvcFunctionName)
         {
-            this.type = type;
-            triggerAttrib = regSvcTrigger;
+            this.hasDefaultValue = parameterInfo.HasDefaultValue;
+            this.defaultValue = parameterInfo.DefaultValue;
+            
+            this.isArray = parameterInfo.ParameterType.IsArray;
+            this.elementType = parameterInfo.ParameterType.IsArray ? 
+                parameterInfo.ParameterType.GetElementType() :
+                parameterInfo.ParameterType.GetType();
+
+            triggerAttribute = regSvcTrigger;
             triggerFunction = regSvcFunctionName;
         }
 
@@ -31,10 +48,35 @@ namespace FuncInjector
 
         public async Task<IValueProvider> BindAsync(BindingContext context)
         {
-            var provider = triggerAttrib.GetServiceProvider(triggerFunction);
-            var scope = triggerAttrib.Scopes.GetOrAdd(context.FunctionInstanceId, (_) => provider.CreateScope());
-            var value = scope.ServiceProvider.GetRequiredService(type);
-            return await BindAsync(value, context.ValueContext);
+            var provider = triggerAttribute.GetServiceProvider(triggerFunction);
+            var scope = triggerAttribute.Scopes.GetOrAdd(context.FunctionInstanceId, (_) => provider.CreateScope());
+
+
+            var services = hasDefaultValue ?
+               (
+                   isArray ?
+                       BindAsync(
+                           scope.ServiceProvider.GetServices(elementType),
+                           context.ValueContext
+                       )
+                       :
+                       BindAsync(
+                           scope.ServiceProvider.GetService(elementType),
+                           context.ValueContext
+                       )
+               ) : (
+                   isArray ?
+                       BindAsync(
+                           scope.ServiceProvider.GetServices(elementType),
+                           context.ValueContext
+                       )
+                       :
+                       BindAsync(
+                           scope.ServiceProvider.GetRequiredService(elementType),
+                           context.ValueContext
+                       )
+               );
+            return await services;
         }
 
         public ParameterDescriptor ToParameterDescriptor() => new ParameterDescriptor();
